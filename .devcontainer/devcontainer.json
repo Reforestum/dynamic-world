@@ -1,0 +1,36 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.166.1/containers/python-3
+{
+  "name": "Python 3",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": "..",
+    "target": "dev"
+  },
+  // Set *default* container specific settings.json values on container create.
+  "settings": {
+    "python.pythonPath": "/usr/local/bin/python",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.formatting.blackPath": "/usr/local/bin/black",
+    "python.linting.flake8Path": "/usr/local/bin/flake8",
+    "python.testing.pytestArgs": ["tests"],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+  },
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-toolsai.jupyter",
+    "mhutchie.git-graph",
+    "randomfractalsinc.geo-data-viewer"
+  ],
+  "runArgs": ["--env-file", ".env"]
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+  // Use 'postCreateCommand' to run commands after the container is created.ker p
+  // "postCreateCommand": "pip3 install --user -r requirements.txt",
+  // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  //"remoteUser": "vscode"
+}

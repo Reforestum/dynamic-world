@@ -1,0 +1,43 @@
+name: PR health check
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Install SOPS binary
+        uses: mdgreenwald/mozilla-sops-action@v1.1.0
+        with:
+          version: v3.7.1
+
+      - name: Checkout the project
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9.13'
+
+      - name: Build dev env
+        run: docker build --tag local --file Dockerfile --target dev .
+
+      - name: Lint
+        run: docker run local flake8
+
+      - name: Azure CLI login  # Need to do this before using sops
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Start testing environment
+        run: sops exec-file encrypted.env "docker run --env-file {} local pytest --cov mrv --cov-branch --cov-report term-missing | tee pytest-coverage.txt"
+
+      - name: Check Containers for testing
+        run: docker ps -a
+
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: ./pytest-coverage.txt

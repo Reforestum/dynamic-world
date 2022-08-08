@@ -1,0 +1,13 @@
+# Name of the forest/proyect
+name : Sample
+
+# Locations of the geojson file and json file with carbon factor/metric
+geojson : './sample.geojson'
+carbon_factor : {
+    "trees" : 1,
+    "other" : 0,
+    "factor_pixel" : 100
+}
+
+# Date in which the reforestation started
+start_date: '0000'
