@@ -22,11 +22,11 @@ jobs:
         run: docker run local flake8
 
       - name: Start testing environment
+        env:
+            SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
         run: |
           set -o pipefail
           docker run local pytest --cov dynamic_world --cov-branch --cov-report term-missing | tee pytest-coverage.txt
-        env:
-          SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
 
       - name: Check Containers for testing
         run: docker ps -a
