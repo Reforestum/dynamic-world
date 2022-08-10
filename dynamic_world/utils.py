@@ -29,7 +29,7 @@ def initialize_ee():
             json.dump(service_account_dict, file)
 
         credentials = ee.ServiceAccountCredentials(
-            "mrv-dynamic-world-app@mrv-dynamic-world-app.iam.gserviceaccount.com",
+            service_account_dict["client_email"],
             tmpfile.name,
         )
     ee.Initialize(credentials)
