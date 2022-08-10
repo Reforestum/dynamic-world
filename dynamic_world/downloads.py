@@ -25,6 +25,8 @@ def download_single_date_image(
         start_date: a string with format YYYY-mm-dd
         end_date: a string with format YYYY-mm-dd, must be after start_date
         forest: a ForestConfig instance
+        destination_folder: the folder where the files are stored
+            created if not exists
     Returns:
         a string containing the path to the newly created COG file
     """
@@ -69,10 +71,14 @@ def download_single_date_image(
         region=borders,
         crs='EPSG:4326')
 
+    get_logger().info(f"Successfully created TIFF file {file_path}")
+
     os.system("gdal_translate " +
               str(file_path) +
               " " +
               str(file_path_cog) +
               " -of COG -co COMPRESS=LZW")
+
+    get_logger().info(f"Successfully created COG file {file_path_cog}")
 
     return file_path_cog

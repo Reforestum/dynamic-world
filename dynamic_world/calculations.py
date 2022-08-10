@@ -21,7 +21,7 @@ def single_date_calculation(
     using the classification defined by Google Dynamic Wold
     (https://www.nature.com/articles/s41597-022-01307-4)
     To retrieve the current status of a pixel we use the mode
-    (typically nulls are associated to clouds), starting 1 year before 'date'.
+    (typically nulls are associated to clouds) between start_date and end_date.
     Each pixel is 10x10m.
     Args:
         start_date: a string with format YYYY-mm-dd
@@ -98,7 +98,8 @@ def carbon_factor_calculation(
     IMPORTANT: each square must represent a 10m x 10m area
     FOR NA's: we assume they distribute just like the pixels
     which we have information about.
-    For example, if pixels contain 40% forest, we suppose NA's also have 40% forest.
+    For example, if available pixels contain 40% forest,
+    we suppose NA's also have 40% forest.
     Args:
         pixel_counts: a dictionary containing the counts of each category
         forest: a ForestConfig object (containing a carbon_factor_info dictionary).
