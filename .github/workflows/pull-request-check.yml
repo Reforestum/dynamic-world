@@ -26,7 +26,6 @@ jobs:
           set -o pipefail
           docker run local pytest --cov dynamic_world --cov-branch --cov-report term-missing | tee pytest-coverage.txt
         env:
-          GE_TOKEN: ${{ secrets.GE_TOKEN }}
           SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
 
       - name: Check Containers for testing
