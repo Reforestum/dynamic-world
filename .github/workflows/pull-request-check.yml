@@ -24,7 +24,7 @@ jobs:
       - name: Start testing environment
         run: |
           set -o pipefail
-          docker run --e SERVICE_ACCOUNT=${{ secrets.SERVICE_ACCOUNT }} local pytest --cov dynamic_world --cov-branch --cov-report term-missing | tee pytest-coverage.txt
+          docker run -e SERVICE_ACCOUNT=${{ secrets.SERVICE_ACCOUNT }} local pytest --cov dynamic_world --cov-branch --cov-report term-missing | tee pytest-coverage.txt
 
       - name: Check Containers for testing
         run: docker ps -a
