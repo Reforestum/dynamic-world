@@ -1,10 +1,11 @@
-# mrv-dynamic-world-app
+# dynamic-world
 
-Work in progress 👷
+Package that allow for remote monitoring of reforested forests based around [Google's Dynamic World App](https://dynamicworld.app/) (see attributions bellow).
 
 ## Usage
 
-This application allows for remote monitoring of forests based around [Google's Dynamic World App](https://dynamicworld.app/).
+Given a Forest (defined as a directory with some configuration files, see bellow), this package retrieves statistics and images.
+See [Jupyter tutorial](Notebooks/dynamic_world_tutorial.ipynb) for a usage example.
 
 ### Forests
 
@@ -13,10 +14,10 @@ Each forest (or "proyect") is stored inside a directory with a given name. Insid
 
 ```yaml
 # Name of the forest/proyect
-name : Dummy
+name : Sample
 
 # Locations of the geojson file and dcitionary with carbon factor/metric
-geojson : './dummy.geojson'
+geojson : './sample.geojson'
 carbon_factor : {
     "trees" : 1,
     "other" : 0, # MUST contain this label
@@ -29,67 +30,32 @@ start_date: '2022-01-01'
 
 - a valid geojson file [see](https://geojson.org/) (named as defined in forest_config.yml) that defines the area
 
-Internally, forests are stored as a ForestConfig instance (see mrv.configurations for more details).
+Internally, forests are stored as a ForestConfig instance (see dynamic_world.configurations for more details).
 
 ### Available calculations
 
-Given a forest and a pair of dates, we download the forest image, landcover statistics and carbon factor [^cf_foot] calculation.
+Given a forest and a pair of dates, we download the forest's landcover image, landcover statistics and carbon factor [^cf_foot] calculation.
 
 [^cf_foot]: by carbon factor we mean the amount of CO2 (measured in tons) that a forest stores (and therefore is not released into the atmosphere :D)
 
-The forest image is stored inside a [Cloud Optimized Geotiff](https://www.cogeo.org/) file. The expression used for the file-name is the following (assuming):
+The forest image is stored inside a [Cloud Optimized Geotiff](https://www.cogeo.org/) file. The expression used for the file-name is the following:
 
 ```python
 f"{forest.name.replace(' ', '_')}_{start_date}_{end_date}.cog.tif"
 ```
 
-Statistics and carbon factors are stored inside a geojson named like:
+For [reductions](https://developers.google.com/earth-engine/guides/reducers_intro) we use the Mode (polling). If a very large time interval is specified, recent changes in the forest will be masked by old pixel values. It is encouraged to use the smallest possible time intervals (at least a week is required or there may not be data). However, depending on some factors (such as the amount of clouds), specifying a small time interval may result in many NA (see mrv.calculations documentation for further info on how NA are treated when calculating the carbon factor).
 
-```python
-f"{forest.name.replace(' ', '_')}_{start_date}_{end_date}_carbon_factor.json"
-```
+---
+## Attributions
 
-The resulting file will look like this:
-
-```json
-{
-    "date": "2022-01-01", 
-    "pixel_counts": {
-        "NA": 1,
-        "bare": 1,
-        "built": 1,
-        "crops": 1,
-        "flooded_vegetation": 1,
-        "grass": 1,
-        "shrub_and_scrub": 1,
-        "snow_and_ice": 1,
-        "trees": 1,
-        "water": 1
-        },
-    "carbon_factor": 100.0
-}
-```
-
-For [reductions](https://developers.google.com/earth-engine/guides/reducers_intro) we use the Mode (polling). If a very large time interval is specified, recent changes in the forest will be masked by old pixel values. It is encouraged to use the smallest possible time intervals (at least a week is required or there may not be data). However, depending on some factors (such as the amount of clouds), specifying a small time interval may result in many NA (see mrv.calculations for further info on how NA are treated when calculating the carbon factor).
-
-### Available command-line options
-
-By default, calculations are made for all the forests inside the directory "./forests/" unless the argument --base-directory is specified and an existing directory is provided.
-You can specify only some forests and some dates using the flags --forests and --dates. By default a weekly analysis (on Mondays) is made using a time interval of 6 months.
-If an analysis (JSON or TIFF) already exists inside the forest's directory (inside Azure) (only file-names are checked), an analysis won't run again unless the flag --force is specified.
-To adjust the length of time intervals used in GEE, a --period argument can be specified, it is 6 months by default.
-To adjust the frequency of analysis you can specify a --freq argument, it is weekly on mondays by default.
-
-To see these options in detail, use the --help flag
-
+This dataset is produced for the Dynamic World Project by Google in partnership with National Geographic Society and the World Resources Institute.
 ---
 
 # Development notes
 
 ## How to run locally
 
-- to execute exhaustive analysis, run "python run.py"
-- to see the available command line options run "python run.py --help"
 - to test run 'pytest' in the root directory of the proyect
 - to run coverage use 'pytest --cov mrv --cov-branch --cov-report term-missing --disable-warnings'
 
