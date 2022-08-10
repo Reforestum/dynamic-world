@@ -25,6 +25,5 @@ FROM base as prod
 
 WORKDIR /app
 COPY poetry.lock pyproject.toml ./
-RUN poetry install --no-interaction --only main
+RUN poetry install --no-interaction --no-dev
 COPY . /app
-CMD [ "python", "main.py" ]
