@@ -22,7 +22,7 @@ jobs:
         run: docker run local flake8
 
       - name: Start testing environment
-        run: docker run local pytest --cov mrv --cov-branch --cov-report term-missing | tee pytest-coverage.txt
+        run: docker run local pytest --cov dynamic_world --cov-branch --cov-report term-missing | tee pytest-coverage.txt
         env:
           GE_TOKEN: ${{ secrets.GE_TOKEN }}
           SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
@@ -33,4 +33,4 @@ jobs:
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
         with:
-          pytest-coverage-path: ./pytest-coverage.txt
+          pytest-coverage-path: pytest-coverage.txt

@@ -14,8 +14,6 @@ earthengine-api = "^0.1.316"
 geemap = "^0.15.3"
 geedim = "^1.2.0"
 typer = "^0.5.0"
-azure-storage-blob = "^12.13.0"
-azure-cli = "^2.38.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"
