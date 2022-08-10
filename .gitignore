@@ -1,0 +1,10 @@
+*.vscode
+*.DS_Store
+__pycache__
+*.pytest_cache
+.coverage
+/*.json
+!encrypted.service_account.json
+*.tif
+.env
+!encrypted.env

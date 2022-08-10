@@ -1,0 +1,36 @@
+name: PR health check
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Checkout the project
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9.13'
+
+      - name: Build dev env
+        run: docker build --tag local --file Dockerfile --target dev .
+
+      - name: Lint
+        run: docker run local flake8
+
+      - name: Start testing environment
+        run: |
+          set -o pipefail
+          docker run -e SERVICE_ACCOUNT=${{ secrets.SERVICE_ACCOUNT }} local pytest --cov dynamic_world --cov-branch --cov-report term-missing --junitxml=pytest.xml | tee pytest-coverage.txt
+
+      - name: Check Containers for testing
+        run: docker ps -a
+
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: pytest-coverage.txt
+          junitxml-path: pytest.xml
