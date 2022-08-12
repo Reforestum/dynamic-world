@@ -9,11 +9,10 @@ from pydantic import BaseModel, validator
 from yaml.loader import SafeLoader
 
 # Constants
-from dynamic_world.constants import (FACTOR_PIXEL_LABEL, FOREST_CONFIG_FILENAME,
-                                     OTHER_LABEL, CLASS_LABELS)
+from dynamic_world.constants import (CLASS_LABELS, FACTOR_PIXEL_LABEL,
+                                     FOREST_CONFIG_FILENAME, OTHER_LABEL)
 # Errors
-from dynamic_world.errors import (KeyNotPresentError,
-                                  DateBadFormatError,
+from dynamic_world.errors import (DateBadFormatError, KeyNotPresentError,
                                   UndefinedKeyError)
 
 
@@ -29,7 +28,8 @@ class ForestConfig(BaseModel):
     def carbon_factor_must_contain(cls, v):
         """
         Carbon factors must contain one key named 'other' and another one named
-        'factor_pixel'. All other keys must be also declares in CLASS_LABELS
+        'factor_pixel'. All other keys must be also declaresd in
+        dynamic_world.constants.CLASS_LABELS
         """
         if OTHER_LABEL not in v.keys():
             raise KeyNotPresentError("carbon_factor", OTHER_LABEL)
@@ -64,9 +64,6 @@ class ForestConfig(BaseModel):
         with open(geojson_path) as geojson_file:
             geojson_info = geojson.load(geojson_file)
 
-        # with open(carbon_factor_path) as json_file:
-        #     carbon_factor_info = json.load(json_file)
-
         super().__init__(
             name=name,
             geojson_info=geojson_info,
@@ -82,7 +79,8 @@ def load_config(directory_path: Path) -> ForestConfig:
     A forest configuration is defined by its name, location as geojson object and
     dictionary used to calculate the ammount of carbon retained
     The forest directory MUST contain a file named in the same way as defined in
-    './constants.py'.FOREST_CONFIG_FILENAME, this file has to specify the next fields:
+    dynamic_world.constants.FOREST_CONFIG_FILENAME,
+    this file has to specify the next fields:
         - name: name of the forest/proyect
         - geojson: location of geojson file
         - carbon_factor: location of the json file containing the carbon
@@ -95,7 +93,6 @@ def load_config(directory_path: Path) -> ForestConfig:
         ForestConfig object with the configuration loaded
     TODO:
         Add support for shapefiles?
-        Add carbon_factor dictionary inside forest_config.yml instead of separate file
     """
 
     path = directory_path / FOREST_CONFIG_FILENAME

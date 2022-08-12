@@ -6,11 +6,11 @@ import ee
 import geemap
 
 from dynamic_world.configurations import ForestConfig
-from dynamic_world.utils import validate_dates, get_logger
 # Constants
 from dynamic_world.constants import SCALE
 # Errors
 from dynamic_world.errors import DateBeforeError
+from dynamic_world.utils import get_logger, validate_dates
 
 
 def download_single_date_image(
@@ -19,7 +19,7 @@ def download_single_date_image(
         forest: ForestConfig,
         destination_folder: Path) -> str:
     """
-    Downloads the image of a forest (representing the status a a specific date)
+    Downloads the image of a forest (representing the status at a specific date)
     into a Cloud Optimized Geotiff file
     Args:
         start_date: a string with format YYYY-mm-dd
@@ -30,10 +30,8 @@ def download_single_date_image(
     Returns:
         a string containing the path to the newly created COG file
     """
-    # Ensure both dates are valid
     validate_dates([start_date, end_date])
 
-    # Loading geojson object as ee.FeatureCollection
     ee_geojson = geemap.geojson_to_ee(forest.geojson_info)
 
     # Defining the borders for DW map (must be defined as ee.Geometry)
@@ -73,6 +71,7 @@ def download_single_date_image(
 
     get_logger().info(f"Successfully created TIFF file {file_path}")
 
+    # Use GDAL command to create a COG from the TIFF file
     os.system("gdal_translate " +
               str(file_path) +
               " " +
