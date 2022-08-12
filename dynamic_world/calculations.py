@@ -3,12 +3,12 @@ import ee
 import geemap
 
 from dynamic_world.configurations import ForestConfig
-from dynamic_world.utils import validate_dates, get_logger
 # Constants
-from dynamic_world.constants import (CLASS_LABELS_DICT, FACTOR_PIXEL_LABEL, NA_LABEL,
-                                     OTHER_LABEL, SCALE)
+from dynamic_world.constants import (CLASS_LABELS_DICT, FACTOR_PIXEL_LABEL,
+                                     NA_LABEL, OTHER_LABEL, SCALE)
 # Errors
 from dynamic_world.errors import DateBeforeError
+from dynamic_world.utils import get_logger, validate_dates
 
 
 def single_date_calculation(
@@ -17,8 +17,8 @@ def single_date_calculation(
         forest: ForestConfig) -> "dict[str, int]":
     """
     Retrieves the pixel counts of the area defined in a proyect
-    (see mrv.configurations.py)
-    using the classification defined by Google Dynamic Wold
+    (see dynamic_world.configurations.py)
+    using the classification defined by Google's Dynamic Wold
     (https://www.nature.com/articles/s41597-022-01307-4)
     To retrieve the current status of a pixel we use the mode
     (typically nulls are associated to clouds) between start_date and end_date.
@@ -29,7 +29,7 @@ def single_date_calculation(
         proyect: a ForestConfig (see mrv.configurations.py) object
     Returns:
         a {string : int} dictionary with the following format
-        (all keys could not be present):
+        (some keys could not be present):
             {'NA': 1,
             'bare': 1,
             'built': 1,
@@ -41,7 +41,6 @@ def single_date_calculation(
             'trees': 1,
             'water': 1}
     """
-    # Ensure both dates are valid
     validate_dates([start_date, end_date])
 
     # Loading geojson object as ee.FeatureCollection
@@ -59,7 +58,6 @@ def single_date_calculation(
         get_logger().warning("end_date is before proyect's start_date: " +
                              f"{end_date} > {forest.start_date}")
 
-    # Loading DW map and restrict it to dates and borders
     dw = ee.ImageCollection('GOOGLE/DYNAMICWORLD/V1').filterDate(
         start_date, end_date).filterBounds(
         borders)  # Returns ee.ImageCollection

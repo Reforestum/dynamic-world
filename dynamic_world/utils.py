@@ -15,8 +15,8 @@ from dynamic_world.errors import DateBadFormatError, ForestNotFoundError
 
 def initialize_ee():
     """
-    Initializes Earth Engine service using reforestum mrv-dynamic-world-app
-    service account
+    Initializes Earth Engine service using an encrypted
+    GEE service account
     """
 
     with tempfile.NamedTemporaryFile(suffix=".json", mode="w") as tmpfile:
@@ -37,7 +37,7 @@ def initialize_ee():
 
 def validate_forest_names(forests: List[str], base_directory: str):
     """
-    Check forests correspond to valid directories inside constants.PROYECTS_DIR folder
+    Check forests correspond to valid directories inside base_directory folder
     Args:
         forests: list of strings containing forests names,
         they should correspond to an existing directory
@@ -50,7 +50,7 @@ def validate_forest_names(forests: List[str], base_directory: str):
 
 def validate_dates(dates: List[str]):
     """
-    Check if list of dates has format YYYY-mm-dd
+    Check if list of dates has YYYY-mm-dd format
     Args:
         forests: list of strings representing dates in YYYY-mm-dd format
     """
