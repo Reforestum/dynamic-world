@@ -28,15 +28,15 @@ name: Sample
 # Locations of the geojson file
 geojson: './sample.geojson'
 
-# Co2 factor: how much CO2 is stored on average in each pixel
+# Co2 factor: how many tons of CO2 are stored on average per hectare
 co2_factor: {
     'trees': 591.85,
     'grass': 6,
     'bare': 6,
     'crops': 11.5,
     'flooded_vegetation': 6,
-    'other': 0, # MUST contain this label
-    'factor_pixel': 100, # MUST contain this label
+    'other': 0,
+    'factor_pixel': 100, # Indicates how many pixels are (on average) inside a hectare
   }
 
 # Date in which the reforestation started, in format YYYY-mm-dd
