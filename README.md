@@ -1,6 +1,6 @@
 # dynamic-world 🛰️
 
-Wrapper package around [Google's Dynamic World App](https://dynamicworld.app/) [^1], to easily monitor forests and calculate their carbon storage on a near-real time.
+Wrapper package around [Google's Dynamic World App](https://dynamicworld.app/) [^1], to easily monitor forests and calculate their co2 storage on a near-real time.
 
 [^1]: This dataset is produced for the Dynamic World Project by Google in partnership with National Geographic Society and the World Resources Institute.
 
@@ -28,8 +28,8 @@ name: Sample
 # Locations of the geojson file
 geojson: './sample.geojson'
 
-# Carbon factor: how much CO2 is stored on average in each pixel
-carbon_factor: {
+# Co2 factor: how much CO2 is stored on average in each pixel
+co2_factor: {
     'trees': 591.85,
     'grass': 6,
     'bare': 6,
@@ -57,7 +57,7 @@ The forest image is stored as a [Cloud Optimized Geotiff](https://www.cogeo.org/
 f"{forest.name.replace(' ', '_')}_{start_date}_{end_date}.cog.tif"
 ```
 
-For [reductions](https://developers.google.com/earth-engine/guides/reducers_intro) we use the Mode (polling). If a very large time interval is specified, recent changes in the forest will be masked by old pixel values. It is encouraged to use the smallest possible time intervals (at least a week is required or there may not be data). However, depending on some factors (such as the amount of clouds), specifying a small time interval may result in many NA (see mrv.calculations documentation for further info on how NA are treated when calculating the carbon factor).
+For [reductions](https://developers.google.com/earth-engine/guides/reducers_intro) we use the Mode (polling). If a very large time interval is specified, recent changes in the forest will be masked by old pixel values. It is encouraged to use the smallest possible time intervals (at least a week is required or there may not be data). However, depending on some factors (such as the amount of clouds), specifying a small time interval may result in many NA (see mrv.calculations documentation for further info on how NA are treated when calculating the co2 factor).
 
 ---
 

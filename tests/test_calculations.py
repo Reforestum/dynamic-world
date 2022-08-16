@@ -2,7 +2,7 @@ import pytest
 
 from dynamic_world.configurations import load_config
 from dynamic_world.calculations import (single_date_calculation,
-                                        carbon_factor_calculation)
+                                        co2_factor_calculation)
 from dynamic_world.utils import initialize_ee
 
 # TODO gives warnings, but I'm pretty sure that it's due to 3rd party libaries,
@@ -58,10 +58,10 @@ class TestSingleDateCalculation:
                 single_date_calculation('2022-06-04', '2000-01-01', forest)
 
 
-class TestCarbonFactorCalculation:
+class TestCo2FactorCalculation:
 
     class TestHappyPaths:
-        def test_carbon_factor_calculation_correct(self, directory):
+        def test_co2_factor_calculation_correct(self, directory):
             # 1/9 because there is 1 NA and forest proportion is 1/9
             expected_value = 1 + 1/9
 
@@ -79,9 +79,9 @@ class TestCarbonFactorCalculation:
                 'water': 1
             }
 
-            assert carbon_factor_calculation(pixel_counts, forest) == expected_value
+            assert co2_factor_calculation(pixel_counts, forest) == expected_value
 
-        def test_carbon_factor_calculation_no_na_key(self, directory):
+        def test_co2_factor_calculation_no_na_key(self, directory):
             forest = load_config(directory["sample_base_path"])
             pixel_counts = {
                 'bare': 1,
@@ -96,4 +96,4 @@ class TestCarbonFactorCalculation:
             }
             expected_value = 1
 
-            assert carbon_factor_calculation(pixel_counts, forest) == expected_value
+            assert co2_factor_calculation(pixel_counts, forest) == expected_value

@@ -3,11 +3,6 @@ name: Sample
 
 # Locations of the geojson file and dcitionary with co2 factor/metric
 geojson: './sample.geojson'
-co2_factor: {
-    'trees': 1,
-    'other': 0, # MUST contain this
-    'factor_pixel': 1, # MUST contain this
-  }
 
 # Date in which the reforestation started
 start_date: '2022-01-01'

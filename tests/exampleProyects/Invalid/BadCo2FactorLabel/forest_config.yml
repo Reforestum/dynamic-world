@@ -3,7 +3,7 @@ name: Sample
 
 # Locations of the geojson file and json file with co2 factor/metric
 geojson: './sample.geojson'
-co2_factor: {'trees': 1, 'other': 0}
+co2_factor: {'bad_label': 1, 'other': 0, 'factor_pixel': 1}
 
 # Date in which the reforestation started
-start_date: '2020-01-01'
+start_date: '2022-01-01'

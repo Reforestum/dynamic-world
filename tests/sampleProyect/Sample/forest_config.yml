@@ -1,13 +1,9 @@
 # Name of the forest/proyect
-name : Sample
+name: Sample
 
-# Locations of the geojson file and dictionary with carbon factor/metric
-geojson : './sample.geojson'
-carbon_factor : {
-    "trees" : 1,
-    "other" : 0,
-    "factor_pixel" : 1
-}
+# Locations of the geojson file and dictionary with co2 factor/metric
+geojson: './sample.geojson'
+co2_factor: {'trees': 1, 'other': 0, 'factor_pixel': 1}
 
 # Date in which the reforestation started
 start_date: '2022-07-01'

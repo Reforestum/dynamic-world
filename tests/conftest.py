@@ -13,8 +13,8 @@ def directory():
     directory = {
         "cordillera_base_path": cordillera_base_path,
         "cordillera_geojson": cordillera_base_path / "cordillera_azul_4326.geojson",
-        "cordillera_carbon_factor":
-            cordillera_base_path / "cordillera_azul_carbon_factor.json",
+        "cordillera_co2_factor":
+            cordillera_base_path / "cordillera_azul_co2_factor.json",
         "sample_base_path": sample_base_path,
         "base_path_string": base_path_string
     }

@@ -84,11 +84,11 @@ def single_date_calculation(
     return counts_formatted.getInfo()
 
 
-def carbon_factor_calculation(
+def co2_factor_calculation(
         pixel_counts: "dict[str, int]",
         forest: ForestConfig) -> float:
     """
-    Calulates the Carbon Tons. absorbed by a forest with a
+    Calulates the Co2 Tons. absorbed by a forest with a
     specific landcover distribution.
     Each pixel has an associated weight depending on the class
     (forest >> built, for example)
@@ -100,7 +100,7 @@ def carbon_factor_calculation(
     we suppose NA's also have 40% forest.
     Args:
         pixel_counts: a dictionary containing the counts of each category
-        forest: a ForestConfig object (containing a carbon_factor_info dictionary).
+        forest: a ForestConfig object (containing a co2_factor_info dictionary).
             The keys in this dictionary should map to the keys in pixel_counts
             (except for 'other' and 'factor_pixel').
     Returns:
@@ -111,7 +111,7 @@ def carbon_factor_calculation(
     if NA_LABEL not in pixel_counts_copy.keys():
         pixel_counts_copy[NA_LABEL] = 0
 
-    metric = forest.carbon_factor_info.copy()
+    metric = forest.co2_factor_info.copy()
 
     totalCO2 = 0
 
