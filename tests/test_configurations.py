@@ -13,7 +13,7 @@ class TestLoadConfig:
             expected_info = {
                 "name": "Cordillera Azul",
                 "geojson_info": geojson_object,
-                "carbon_factor_info": {
+                "co2_factor_info": {
                     "trees" : 591.85,
                     "grass" : 6,
                     "bare" : 6,
@@ -43,15 +43,15 @@ class TestLoadConfig:
             with pytest.raises(FileNotFoundError):
                 load_config(Path("tests/exampleProyects/Invalid/NoGeojson"))
 
-        def test_load_config_missing_carbon_factor(self):
+        def test_load_config_missing_co2_factor(self):
             with pytest.raises(KeyError):
-                load_config(Path("tests/exampleProyects/Invalid/NoCarbonFactor"))
+                load_config(Path("tests/exampleProyects/Invalid/NoCo2Factor"))
 
-        def test_load_config_carbon_factor_missing_other_key(self):
+        def test_load_config_co2_factor_missing_other_key(self):
             with pytest.raises(ValueError):
                 load_config(Path("tests/exampleProyects/Invalid/NoOtherKey"))
 
-        def test_load_config_carbon_factor_missing_factor_pixel_key(self):
+        def test_load_config_co2_factor_missing_factor_pixel_key(self):
             with pytest.raises(ValueError):
                 load_config(Path("tests/exampleProyects/Invalid/NoFactorPixelKey"))
 
@@ -59,6 +59,6 @@ class TestLoadConfig:
             with pytest.raises(ValueError):
                 load_config(Path("tests/exampleProyects/Invalid/BadDate"))
 
-        def test_load_config_invalid_carbon_factor_label(self):
+        def test_load_config_invalid_co2_factor_label(self):
             with pytest.raises(ValueError):
-                load_config(Path("tests/exampleProyects/Invalid/BadCarbonFactorLabel"))
+                load_config(Path("tests/exampleProyects/Invalid/BadCo2FactorLabel"))

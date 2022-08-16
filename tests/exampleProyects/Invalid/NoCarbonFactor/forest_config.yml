@@ -1,8 +1,0 @@
-# Name of the forest/proyect
-name : Sample
-
-# Locations of the geojson file and dcitionary with carbon factor/metric
-geojson : './sample.geojson'
-
-# Date in which the reforestation started
-start_date: '2022-01-01'

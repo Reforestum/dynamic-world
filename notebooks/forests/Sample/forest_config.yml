@@ -1,8 +1,8 @@
 # Name of the forest/proyect
-name: Cordillera Azul
+name: Sample
 
 # Locations of the geojson file and dictionary with co2 factor/metric
-geojson: './cordillera_azul_4326.geojson'
+geojson: './sample.geojson'
 co2_factor:
   {
     'trees': 591.85,
@@ -15,4 +15,4 @@ co2_factor:
   }
 
 # Date in which the reforestation started
-start_date: '2022-01-01'
+start_date: '2019-01-01'
