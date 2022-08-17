@@ -1,6 +1,10 @@
 name: Publish package to PIP
 
 on:
+# Just for testing
+  push:
+    branches:
+      - "fix/publish-workflow"
   release:
     types: [published]
     tags:
@@ -49,8 +53,11 @@ jobs:
         - name: Build python package
           run: docker run local poetry build
 
+        # Just for testing
+        # docker run local poetry version $(git describe --tags --abbrev=0)
         - name: Publish a Python distribution to PyPI
           run: |
-            docker run local poetry version $(git describe --tags --abbrev=0)
+            docker run local poetry version 0.3.3
             docker run local poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN}}
-            docker run local poetry publish --build
+            docker run local poetry build
+            docker run local poetry publish
