@@ -46,11 +46,11 @@ jobs:
         - name: Build dev env
           run: docker build --tag local --file Dockerfile --target prod .
 
-        - name: Build python package
-          run: docker run local poetry build
-
         - name: Publish a Python distribution to PyPI
           run: |
-            docker run local poetry version $(git describe --tags --abbrev=0)
-            docker run local poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN}}
-            docker run local poetry publish --build
+            docker run local /bin/bash -c \
+              "poetry version ${{ github.ref_name }} && 
+              poetry publish \
+                --build \
+                --username ${{secrets.PYPI_USERNAME}} \
+                --password ${{secrets.PYPI_PASSWORD}}"

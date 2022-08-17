@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "dynamic-world"
-version = "v0.3.0" # PLaceholder, use dynamic versioning based on git tag
+version = "0.0.0" # Placeholder, use dynamic versioning based on git tag
 description = "Land-use land-cover analysis using Dynamic World App from Earth Engine"
 authors = ["Reforestum team <info@reforestum.com>"]
 readme = "README.md"
 license = "CC-BY-4.0"
 repository = "https://github.com/Reforestum/dynamic-world"
-homepage= "reforestum.com"
+homepage= "https://reforestum.com/"
 
 [tool.poetry.dependencies]
 geojson = "^2.5.0"
