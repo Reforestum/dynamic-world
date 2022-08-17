@@ -51,6 +51,6 @@ jobs:
 
         - name: Publish a Python distribution to PyPI
           run: |
-            poetry version $(git describe --tags --abbrev=0)
-            poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN}}
-            poetry publish --build
+            docker run local poetry version $(git describe --tags --abbrev=0)
+            docker run local poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN}}
+            docker run local poetry publish --build
