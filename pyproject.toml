@@ -1,17 +1,12 @@
 [tool.poetry]
 name = "dynamic-world"
-version = "0.0.0" # PLaceholder, use dynamic versioning based on git tag
+version = "v0.3.0" # PLaceholder, use dynamic versioning based on git tag
 description = "Land-use land-cover analysis using Dynamic World App from Earth Engine"
 authors = ["Reforestum team <info@reforestum.com>"]
 readme = "README.md"
 license = "CC-BY-4.0"
 repository = "https://github.com/Reforestum/dynamic-world"
 homepage= "reforestum.com"
-
-[tool.poetry-dynamic-versioning]
-enable = true
-vcs = "git"
-style = "semver"
 
 [tool.poetry.dependencies]
 geojson = "^2.5.0"
@@ -31,5 +26,5 @@ pytest-cov = "^3.0.0"
 pytest-mock = "^3.8.2"
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
