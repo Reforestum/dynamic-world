@@ -60,5 +60,5 @@ jobs:
             docker run local poetry version 0.3.3
             docker run local poetry publish \
               --build \
-              --username ${{secets.PYPI_USERNAME}} \
-              --password ${{secets.PYPI_PASSWORD}} 
+              --username ${{secrets.PYPI_USERNAME}} \
+              --password ${{secrets.PYPI_PASSWORD}} 
