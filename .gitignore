@@ -8,3 +8,4 @@ __pycache__
 *.tif
 .env
 !encrypted.env
+dist/
