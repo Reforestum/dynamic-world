@@ -6,7 +6,7 @@ authors = ["Reforestum team <info@reforestum.com>"]
 readme = "README.md"
 license = "CC-BY-4.0"
 repository = "https://github.com/Reforestum/dynamic-world"
-homepage= "reforestum.com"
+homepage= "https://reforestum.com/"
 
 [tool.poetry.dependencies]
 geojson = "^2.5.0"
