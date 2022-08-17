@@ -59,5 +59,4 @@ jobs:
           run: |
             docker run local poetry version 0.3.3
             docker run local poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN}}
-            docker run local poetry build
-            docker run local poetry publish
+            docker run local poetry publish --build
