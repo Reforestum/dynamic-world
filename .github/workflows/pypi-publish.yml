@@ -1,10 +1,6 @@
 name: Publish package to PIP
 
 on:
-# Just for testing
-  push:
-    branches:
-      - "fix/publish-workflow"
   release:
     types: [published]
     tags:
@@ -50,12 +46,10 @@ jobs:
         - name: Build dev env
           run: docker build --tag local --file Dockerfile --target prod .
 
-        # Just for testing
-        # docker run local poetry version $(git describe --tags --abbrev=0)
         - name: Publish a Python distribution to PyPI
           run: |
             docker run local /bin/bash -c \
-              "poetry version 0.3.3 && 
+              "poetry version ${{ github.ref_name }} && 
               poetry publish \
                 --build \
                 --username ${{secrets.PYPI_USERNAME}} \
