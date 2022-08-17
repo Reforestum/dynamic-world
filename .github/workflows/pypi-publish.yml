@@ -3,6 +3,8 @@ name: Publish package to PIP
 on:
   release:
     types: [published]
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   test:
@@ -47,10 +49,8 @@ jobs:
         - name: Build python package
           run: docker run local poetry build
 
-        - name: Install dynamic versioning poetry plugin
-          run: ${XDG_DATA_HOME:-~/.local/share}/pypoetry/venv/bin/pip install poetry-dynamic-versioning==0.17.1
-
         - name: Publish a Python distribution to PyPI
           run: |
+            poetry version $(git describe --tags --abbrev=0)
             poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN}}
             poetry publish --build
