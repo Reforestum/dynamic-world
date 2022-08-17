@@ -1,0 +1,56 @@
+name: Publish package to PIP
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Checkout the project
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9.13'
+
+      - name: Build dev env
+        run: docker build --tag local --file Dockerfile --target dev .
+
+      - name: Lint
+        run: docker run local flake8
+
+      - name: Start testing environment
+        run: docker run -e SERVICE_ACCOUNT=${{ secrets.SERVICE_ACCOUNT }} local pytest
+
+
+  publish:
+    needs: test
+    environment:
+      name: pypi-publish
+    runs-on: ubuntu-latest
+
+    steps:
+        - name: Check out repository code
+          uses: actions/checkout@v2
+
+        - name: Checkout the project
+          uses: actions/setup-python@v2
+          with:
+            python-version: '3.9.13'
+
+        - name: Build dev env
+          run: docker build --tag local --file Dockerfile --target prod .
+
+        - name: Build python package
+          run: docker run local poetry build
+
+        - name: Install dynamic versioning poetry plugin
+          run: ${XDG_DATA_HOME:-~/.local/share}/pypoetry/venv/bin/pip install poetry-dynamic-versioning==0.17.1
+
+        - name: Publish a Python distribution to PyPI
+          run: |
+          poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN}}
+          poetry publish --build
