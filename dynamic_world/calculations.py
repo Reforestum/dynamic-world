@@ -1,20 +1,21 @@
-# Dependencies
 import ee
 import geemap
 
 from dynamic_world.configurations import ForestConfig
-# Constants
-from dynamic_world.constants import (CLASS_LABELS_DICT, FACTOR_PIXEL_LABEL,
-                                     NA_LABEL, OTHER_LABEL, SCALE)
-# Errors
+from dynamic_world.constants import (
+    CLASS_LABELS_DICT,
+    FACTOR_PIXEL_LABEL,
+    NA_LABEL,
+    OTHER_LABEL,
+    SCALE,
+)
 from dynamic_world.errors import DateBeforeError
 from dynamic_world.utils import get_logger, validate_dates
 
 
 def single_date_calculation(
-        start_date: str,
-        end_date: str,
-        forest: ForestConfig) -> "dict[str, int]":
+    start_date: str, end_date: str, forest: ForestConfig
+) -> "dict[str, int]":
     """
     Retrieves the pixel counts of the area defined in a proyect
     (see dynamic_world.configurations.py)
@@ -55,15 +56,19 @@ def single_date_calculation(
 
     # If end_date is before proyect's start_date raise a warning
     if forest.start_date > end_date:
-        get_logger().warning("end_date is before proyect's start_date: " +
-                             f"{end_date} > {forest.start_date}")
+        get_logger().warning(
+            "end_date is before proyect's start_date: "
+            + f"{end_date} > {forest.start_date}"
+        )
 
-    dw = ee.ImageCollection('GOOGLE/DYNAMICWORLD/V1').filterDate(
-        start_date, end_date).filterBounds(
-        borders)  # Returns ee.ImageCollection
+    dw = (
+        ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1")
+        .filterDate(start_date, end_date)
+        .filterBounds(borders)
+    )  # Returns ee.ImageCollection
 
     # Reducing using the mode (polling)
-    classification = dw.select('label')
+    classification = dw.select("label")
     dw_composite = classification.reduce(ee.Reducer.mode()).clip(borders)
 
     # Extract pixel counts
@@ -71,22 +76,23 @@ def single_date_calculation(
         geometry=borders,
         reducer=ee.Reducer.frequencyHistogram().unweighted(),
         scale=SCALE,  # IMPORTANT!!!! each pixel is 10m x 10m
-        maxPixels=1e10)
+        maxPixels=1e10,
+    )
 
-    counts = ee.Dictionary(countStats.get('label_mode'))
+    counts = ee.Dictionary(countStats.get("label_mode"))
 
     # Rename using propper classLabels (not 0-8)
     old_keys = counts.keys().getInfo()
     counts_formatted = counts.rename(
-        old_keys,
-        [CLASS_LABELS_DICT.get(key) for key in old_keys])
+        old_keys, [CLASS_LABELS_DICT.get(key) for key in old_keys]
+    )
 
     return counts_formatted.getInfo()
 
 
 def co2_factor_calculation(
-        pixel_counts: "dict[str, int]",
-        forest: ForestConfig) -> float:
+    pixel_counts: "dict[str, int]", forest: ForestConfig
+) -> float:
     """
     Calulates the Co2 Tons. absorbed by a forest with a
     specific landcover distribution.
@@ -122,15 +128,17 @@ def co2_factor_calculation(
     #  First we remove the NA assuming they
     # distribute just like the pixels for which we have info
     for notNAKey in set(pixel_counts_copy.keys()).difference([NA_LABEL]):
-        pixel_counts_copy[notNAKey] += pixel_counts_copy[
-            NA_LABEL] * pixel_counts_copy[notNAKey] / notNACount
+        pixel_counts_copy[notNAKey] += (
+            pixel_counts_copy[NA_LABEL] * pixel_counts_copy[notNAKey] / notNACount
+        )
 
-    for commonKey in set(metric.keys()).intersection(pixel_counts_copy.keys()) :
+    for commonKey in set(metric.keys()).intersection(pixel_counts_copy.keys()):
         totalCO2 += pixel_counts_copy[commonKey] * metric[commonKey] / factorPixel
 
     # We apply the metric for 'other' keys
     for otherKey in set(pixel_counts_copy.keys()).difference(
-            list(metric.keys()) + [NA_LABEL]):
+        list(metric.keys()) + [NA_LABEL]
+    ):
         totalCO2 += pixel_counts_copy[otherKey] * metric[OTHER_LABEL] / factorPixel
 
     return totalCO2

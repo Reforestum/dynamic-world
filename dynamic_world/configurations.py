@@ -1,4 +1,3 @@
-# Dependencies
 import datetime
 from pathlib import Path
 from typing import Any, Dict
@@ -8,12 +7,17 @@ import yaml
 from pydantic import BaseModel, validator
 from yaml.loader import SafeLoader
 
-# Constants
-from dynamic_world.constants import (CLASS_LABELS, FACTOR_PIXEL_LABEL,
-                                     FOREST_CONFIG_FILENAME, OTHER_LABEL)
-# Errors
-from dynamic_world.errors import (DateBadFormatError, KeyNotPresentError,
-                                  UndefinedKeyError)
+from dynamic_world.constants import (
+    CLASS_LABELS,
+    FACTOR_PIXEL_LABEL,
+    FOREST_CONFIG_FILENAME,
+    OTHER_LABEL,
+)
+from dynamic_world.errors import (
+    DateBadFormatError,
+    KeyNotPresentError,
+    UndefinedKeyError,
+)
 
 
 class ForestConfig(BaseModel):
@@ -35,8 +39,9 @@ class ForestConfig(BaseModel):
             raise KeyNotPresentError("co2_factor", OTHER_LABEL)
         if FACTOR_PIXEL_LABEL not in v.keys():
             raise KeyNotPresentError("co2_factor", FACTOR_PIXEL_LABEL)
-        for key in [key for key in v.keys() if key not in [OTHER_LABEL,
-                                                           FACTOR_PIXEL_LABEL]]:
+        for key in [
+            key for key in v.keys() if key not in [OTHER_LABEL, FACTOR_PIXEL_LABEL]
+        ]:
             if key not in CLASS_LABELS:
                 raise UndefinedKeyError(key, CLASS_LABELS)
         return v
@@ -47,7 +52,7 @@ class ForestConfig(BaseModel):
         Start date must have format YYYY-mm-dd
         """
         try:
-            datetime.datetime.strptime(v, '%Y-%m-%d')
+            datetime.datetime.strptime(v, "%Y-%m-%d")
         except ValueError:
             raise DateBadFormatError("start_date")
         return v
@@ -104,7 +109,7 @@ def load_config(directory_path: Path) -> ForestConfig:
         name=config_data["name"],
         geojson_path=directory_path / config_data["geojson"],
         co2_factor=config_data["co2_factor"],
-        start_date=config_data["start_date"]
+        start_date=config_data["start_date"],
     )
 
     return forest_configuration
