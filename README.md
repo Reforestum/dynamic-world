@@ -10,6 +10,13 @@ Wrapper package around [Google's Dynamic World App](https://dynamicworld.app/) [
 pip install dynamic-world
 ```
 
+An external C library is required as well: [GDAL](https://gdal.org/download.html). The [Dockerfile](./Dockerfile) already has GDAl installed. If working locally, an easy way to install it is by running `conda install -c conda-forge gdal`
+
+## Google Earth Engine authentication
+
+This package runs computation on Earth Engine and needs to be authenticated beforehand. See the [authentication](https://developers.google.com/earth-engine/guides/python_install#authentication) from a Jupyter notebook, or alternatively using a [private key](https://developers.google.com/earth-engine/guides/service_account#use-a-service-account-with-a-private-key) creating a [service account](https://developers.google.com/earth-engine/guides/service_account).
+
+
 ## Usage
 
 Given a Forest (defined as a directory with some configuration files, see bellow), this package retrieves statistics and images of it.
@@ -65,10 +72,35 @@ For [reductions](https://developers.google.com/earth-engine/guides/reducers_intr
 
 We encourage developers to open the repository using [VSCode remote container functionality](https://code.visualstudio.com/docs/remote/containers).
 
+## Secrets
+
+To run the tests, you will need only one secret, which is Earth Engine's [service account](https://developers.google.com/earth-engine/guides/service_account) base64-encoded:
+
+```
+SERVICE_ACCOUNT=<very-long-string>
+```
+
+The following snippet can be used to base64-encode the `service_account.json` file:
+```console
+python <<HEREDOC
+import base64
+with open('service_account.json', 'rb') as file:
+    file = file.read()
+    base64_encoded_data = base64.b64encode(file)
+    base64_message = base64_encoded_data.decode('utf-8')
+print(base64_message)
+HEREDOC
+```
+
 ## How to run tests locally
 
-- to test run 'pytest' in the root directory of the proyect
-- to run coverage use 'pytest --cov mrv --cov-branch --cov-report term-missing --disable-warnings'
+```zsh
+# In the root directory of the proyect
+pytest
+
+# Run coverage 
+pytest --cov mrv --cov-branch --cov-report term-missing --disable-warnings
+```
 
 ## How to run tests in docker
 
